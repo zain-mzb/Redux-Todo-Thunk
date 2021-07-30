@@ -1,12 +1,35 @@
 
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AddTodoAction, RemoveTodoAction } from './actions/TodoActions';
 import './App.css';
 
+
+
 function App() {
+
+  const [todo, setTodo] = useState();
+
+  const dispatch = useDispatch();
+  const Todo = useSelector(state => state.Todo);
+  const {todos} = Todo;
+
+const handleSubmit = (e) => {
+  e.preventDefault();
+  dispatch(AddTodoAction(todo));
+};
+
+
+const removeHandler=(t)=>{
+  dispatch(RemoveTodoAction(t));
+}
+
+
   return (
     <div className="App">
       <header className="App-header">
        <h2>Redux Todo List App</h2>
-       <form>
+       <form onSubmit={handleSubmit}>
         <input placeholder = "Enter a Todo" 
         style={{
           width: 350,
@@ -15,7 +38,7 @@ function App() {
           border: 'none',
           fontSize:20,
         }}
-        
+        onChange={(e)=> setTodo(e.target.value)}
         />
         <button type="submit" 
         style={{
@@ -28,19 +51,26 @@ function App() {
         >Go</button>
        </form>
        <ul className="allTodos">
-         <li className="singleTodo">
-           <span className="todoText">First Todo</span>
-           <button
-           style={{
-             borderRadius:25,
-             padding:10,
-             border: '1px solid white',
-             color: 'white',
-             backgroundColor: 'red'
-           }}
-           
-           >Delete</button>
-         </li>
+         {
+           todos && todos.map((t)=>(
+            <li key={t.id} className="singleTodo">
+            <span className="todoText">{t.todo}</span>
+            <button
+            style={{
+              borderRadius:25,
+              padding:10,
+              border: '1px solid white',
+              color: 'white',
+              backgroundColor: 'red'
+            }}
+
+            onClick={()=>removeHandler(t)}
+            
+            >Delete</button>
+          </li>
+           ))
+         }
+        
        </ul>
       </header>
     </div>

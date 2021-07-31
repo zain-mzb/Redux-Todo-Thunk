@@ -1,22 +1,43 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import React from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { AddTodoAction, RemoveTodoAction } from './actions/TodoActions';
 import './App.css';
-
+import todoService from './services/TodoService'; 
 
 
 function App() {
 
-  const [todo, setTodo] = useState();
 
+  // const getData = () => {
+  //   todoService
+  //     .getTodo()
+  //     .then((data) => {
+  //       console.log(data);
+       
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
+
+  // console.log("Here i call get data");
+  // console.log(getData());
+  
+  // React.useEffect(getData,[]);
+
+  const [todo, setTodo] = useState();
   const dispatch = useDispatch();
   const Todo = useSelector(state => state.Todo);
   const {todos} = Todo;
 
 const handleSubmit = (e) => {
   e.preventDefault();
+  // console.log("todo is-app.js");
+  // console.log({todo});
   dispatch(AddTodoAction(todo));
+
+ 
 };
 
 
@@ -47,6 +68,21 @@ const removeHandler=(t)=>{
           fontSize:15,
           marginLeft:20
         }}
+
+        
+onClick={(e)=>{
+  todoService
+  .addTodo({todo})     
+  .then((data) => {
+    console.log(data);
+    // props.history.push("/products");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+
+} }
         
         >Go</button>
        </form>
